@@ -6,7 +6,6 @@
 
 import { Hacknet, NS } from '../../NetscriptDefinitions';
 import { HacknetUpgradeEnum } from '../hacknet/HacknetUpgradeEnum.js';
-import { HacknetUpgrade } from '../hacknet/HacknetUpgrade.js';
 
 export abstract class HacknetInstance {
     public abstract GetBestUpgrade(): HacknetUpgrade;
@@ -130,4 +129,14 @@ export class HacknetServer extends HacknetInstance {
             performUpgrade: () => this.PerformUpgrade(upgradeType),
         };
     }
+}
+
+
+export interface HacknetUpgrade {
+    id: number;
+    type: HacknetUpgradeEnum;
+    cost: number;
+    extraHashesPerSecond: number;
+    valueOfUpgrade: number;
+    performUpgrade: () => boolean;
 }

@@ -1,6 +1,5 @@
-import { HacknetServer } from "/hacknet/HacknetInstance.js";
+import { HacknetServer, HacknetUpgrade } from "/hacknet/HacknetInstance.js";
 import { HacknetUpgradeEnum } from "/hacknet/HacknetUpgradeEnum.js";
-import { HacknetUpgrade } from '../hacknet/HacknetUpgrade.js';
 import { Hacknet, NS } from "/../NetscriptDefinitions.js";
 
 export class HacknetManager {
