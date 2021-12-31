@@ -1,9 +1,9 @@
 import { Hacknet, NS } from "/../NetscriptDefinitions.js";
-import { ApplicationSettings } from "/ApplicationSettings.js";
+import { HacknetSettings } from "hacknet/HacknetSettings.js";
 
 export class HashManager {
     private _hacknet: Hacknet;
-    private _applicationSettings;
+    private _hacknetSettings: HacknetSettings;
     /**
      * Create a new instance of HashManager
      * @param {NS} ns
@@ -14,11 +14,14 @@ export class HashManager {
         }
 
         this._hacknet = ns.hacknet;
-        this._applicationSettings = ApplicationSettings;
+        this._hacknetSettings = new HacknetSettings(ns);
     }
 
     public CheckReachedHashLimit(): boolean {
-        return (this._hacknet.numHashes() >= (this._hacknet.hashCapacity() * this._applicationSettings.HacknetSettings.PercentageToFill));
+        const hasHacknetNodes = this._hacknet.hashCapacity() !== 0;
+        const hasReachedConfiguredLimit = (this._hacknet.numHashes() >= (this._hacknet.hashCapacity() * this._hacknetSettings.PercentageToFill));
+        const hasReachedLimit = this._hacknet.hashCapacity() === this._hacknet.numHashes();
+        return hasHacknetNodes && (hasReachedConfiguredLimit || hasReachedLimit);
     }
 
     public SpendHashes(upgrade: string, target?: string | undefined): boolean {

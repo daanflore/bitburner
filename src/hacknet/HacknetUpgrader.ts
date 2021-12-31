@@ -1,6 +1,6 @@
-import { HashManager } from "./HashManager";
+import { HashManager } from "/hacknet/HashManager.js";
 import { NS } from "/../NetscriptDefinitions.js";
-import { ApplicationSettings } from "/ApplicationSettings.js";
+import { ApplicationSettings } from "ApplicationSettings.js";
 import { HacknetManager } from '/hacknet/HacknetManager.js';
 
 export async function main(ns: NS): Promise<void> {
@@ -11,15 +11,16 @@ export async function main(ns: NS): Promise<void> {
         hacknetManager.CreateNewNode();
         const sleepDuration = 500;
         const numberOfLoops = hacknetManager.UpgradeMostValuedHacknetNode() ? 1 : 60000 / sleepDuration;
-
-        for (let loop = 0; loop < numberOfLoops; loop++) {
+        let hasMoneyBeenUsed = true;
+        for (let loop = 0; loop < numberOfLoops; loop++ && hasMoneyBeenUsed) {
             while (hashManager.CheckReachedHashLimit()) {
                 if (!hashManager.SpendHashes(ApplicationSettings.HacknetSettings.UpgradeName, ApplicationSettings.HacknetSettings.Target)) {
-                    hashManager.SpendHashes("Sell for Money");
+                    if(!hashManager.SpendHashes("Sell for Money")) {
+                        hasMoneyBeenUsed = false;
+                    }
                 }
 
                 loop++;
-                await ns.sleep(sleepDuration);
             }
 
             await ns.sleep(sleepDuration);
