@@ -1,4 +1,4 @@
-import { LocalStorageDatabase } from "../Database/LocalStorageDatabase.js";
+import { LocalStorageDatabase } from "/Database/LocalStorageDatabase.js";
 import { NS } from "/../NetscriptDefinitions.js";
 import { IDatabase } from "/Database/IDatabase.js";
 
