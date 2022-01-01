@@ -4,27 +4,29 @@ import { IDatabase } from "/Database/IDatabase.js";
 
 export abstract class SettingsObject {
     [key: string]: any;
-    protected _database: IDatabase;    
-
+    protected _database: IDatabase;
+    protected _parentScriptName: string;
     /**
      *
      */
     constructor(ns: NS, databaseName: string) {
+        this._parentScriptName = ns.getScriptName();
+        //this._ns = ns.ps;
         this._database = new LocalStorageDatabase(ns, databaseName, (key, value) => this.SetValue(this, key, value));
     }
 
     protected ReadValuesFromDatabase(): void {
         for (const prop of Object.keys(this)) {
             if (!prop.startsWith("_")) {
-                this.SetValue(this, prop, this._database.GetItem(prop));
+                this[prop] = this._database.GetItem(prop);
             }
         }
     }
 
     protected SetValue(objectToAlter: SettingsObject, key: string | undefined, value: string | null): void {
         if (key !== undefined && value !== null) {
-            console.log(key);
-            this[key] = value;
+            console.log(`[${this._parentScriptName}]Altering "${key} "to "${value}"`);
+            objectToAlter[key] = value;
         }
     }
 

@@ -8,13 +8,15 @@ export class HashManager {
      * Create a new instance of HashManager
      * @param {NS} ns
      */
-    constructor(private ns: NS) {
+    constructor(private ns: NS, hacknetSettings?: HacknetSettings) {
         if (ns === undefined) {
             throw new Error("ns is required param");
+            
         }
 
         this._hacknet = ns.hacknet;
-        this._hacknetSettings = new HacknetSettings(ns);
+        this._hacknetSettings = hacknetSettings ?? new HacknetSettings(ns);
+
     }
 
     public CheckReachedHashLimit(): boolean {

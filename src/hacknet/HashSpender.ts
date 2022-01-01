@@ -4,7 +4,7 @@ import { HacknetSettings } from "/hacknet/HacknetSettings.js";
 
 export async function main(ns: NS): Promise<void> {
     const hacknetSettings = new HacknetSettings(ns);
-    const hashManager = new HashManager(ns);
+    const hashManager = new HashManager(ns, hacknetSettings);
 
     while (true) {
         SpendHashes();

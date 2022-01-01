@@ -4,9 +4,10 @@ import { HacknetManager } from '/hacknet/HacknetManager.js';
 import { HacknetSettings } from "/hacknet/HacknetSettings.js";
 
 export async function main(ns: NS): Promise<void> {
+    ns.disableLog("ALL");
     const hacknetSettings = new HacknetSettings(ns);
     const hacknetManager = new HacknetManager(ns);
-    const hashManager = new HashManager(ns);
+    const hashManager = new HashManager(ns, hacknetSettings);
 
     while (true) {
         hacknetManager.CreateNewNode();

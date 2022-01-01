@@ -7,7 +7,7 @@ export class HacknetSettings extends SettingsObject {
     public UpgradeName: string;
     public Target: string | undefined;
     public LogLevel: LogLevelEnum;
-    public MinMoneyToKeep: number | undefined;
+    public MinMoneyToKeep: number;
 
     /**
      *
