@@ -12,20 +12,21 @@ export async function main(ns: NS): Promise<void> {
         hacknetManager.CreateNewNode();
         const sleepDuration = 500;
         const numberOfLoops = hacknetManager.UpgradeMostValuedHacknetNode() ? 1 : 60000 / sleepDuration;
-        let hasMoneyBeenUsed = true;
         
-        for (let loop = 0; loop < numberOfLoops; loop++ && hasMoneyBeenUsed) {
-            while (hashManager.CheckReachedHashLimit()) {
-                if (!hashManager.SpendHashes(hacknetSettings.UpgradeName, hacknetSettings.Target)) {
-                    if (!hashManager.SpendHashes("Sell for Money")) {
-                        hasMoneyBeenUsed = false;
-                    }
-                }
-
-                loop++;
-            }
-
+        for (let loop = 0; loop < numberOfLoops; loop++ ) {
+            SpendHashes();
             await ns.sleep(sleepDuration);
+        }
+    }
+
+    function SpendHashes(): void {
+        let hasMoneyBeenUsed = true;
+        while (hashManager.CheckReachedHashLimit() && hasMoneyBeenUsed) {
+            if (!hashManager.SpendHashes(hacknetSettings.UpgradeName, hacknetSettings.Target)) {
+                if (!hashManager.SpendHashes("Sell for Money")) {
+                    hasMoneyBeenUsed = false;
+                }
+            }
         }
     }
 }
