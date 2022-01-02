@@ -20,7 +20,7 @@ export async function main(ns: NS): Promise<void> {
         logger.LogToScriptLog("main loop", LogLevelEnum.Info);
         logger.AddIndent();
         hacknetManager.CreateNewNode();
-        const sleepDuration = 500;
+        const sleepDuration = 100;
         const numberOfLoops = hacknetManager.UpgradeMostValuedHacknetNode() ? 1 : 60000 / sleepDuration;
         logger.RemoveIndent();
         logger.LogToScriptLog(`wait ${numberOfLoops * sleepDuration} milliseconds before trying next upgrade`, LogLevelEnum.Info);
