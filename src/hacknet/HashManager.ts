@@ -11,12 +11,11 @@ export class HashManager {
     constructor(private ns: NS, hacknetSettings?: HacknetSettings) {
         if (ns === undefined) {
             throw new Error("ns is required param");
-            
+
         }
 
         this._hacknet = ns.hacknet;
         this._hacknetSettings = hacknetSettings ?? new HacknetSettings(ns);
-
     }
 
     public CheckReachedHashLimit(): boolean {
@@ -30,7 +29,7 @@ export class HashManager {
         if (this._hacknet.getHashUpgrades().includes(upgrade)) {
             return this._hacknet.spendHashes(upgrade, target);
         }
-        
+
         return false;
     }
 } 

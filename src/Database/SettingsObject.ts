@@ -11,7 +11,6 @@ export abstract class SettingsObject {
      */
     constructor(ns: NS, databaseName: string) {
         this._parentScriptName = ns.getScriptName();
-        //this._ns = ns.ps;
         this._database = new LocalStorageDatabase(ns, databaseName, (key, value) => this.SetValue(this, key, value));
     }
 

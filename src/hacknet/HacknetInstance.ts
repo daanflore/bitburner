@@ -52,8 +52,8 @@ export class HacknetServer extends HacknetInstance {
     public GetBestUpgrade(): HacknetUpgrade {
         let bestUpgrade: HacknetUpgrade = this.GetRamHashGain();
 
-        for(const hackNetUpgrade of [this.GetLevelHashGain(), this.GetCoreHashGain()]) {
-            if( bestUpgrade.valueOfUpgrade < hackNetUpgrade.valueOfUpgrade) {
+        for (const hackNetUpgrade of [this.GetLevelHashGain(), this.GetCoreHashGain()]) {
+            if (bestUpgrade.valueOfUpgrade < hackNetUpgrade.valueOfUpgrade) {
                 bestUpgrade = hackNetUpgrade;
             }
         }

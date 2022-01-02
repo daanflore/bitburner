@@ -1,8 +1,9 @@
 import { NS } from "/../NetscriptDefinitions.js";
 import { SettingsObject } from "/Database/SettingsObject.js";
 import { LogLevelEnum } from "LogLevelEnum.js";
+import { ILoggerSettings } from "/helpers/ILoggerSettings.js";
 
-export class HacknetSettings extends SettingsObject {
+export class HacknetSettings extends SettingsObject implements ILoggerSettings {
     public PercentageToFill: number;
     public UpgradeName: string;
     public Target: string | undefined;
