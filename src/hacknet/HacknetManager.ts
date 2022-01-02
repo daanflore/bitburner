@@ -29,6 +29,7 @@ export class HacknetManager {
         this._maxNodes = this._hacknet.maxNumNodes();
         this._hacknetSettings = hacknetSettings ?? new HacknetSettings(ns);
         this._logger = logger ?? new Logger(ns, this._hacknetSettings);
+        
         for (let index = 0; index < this.CurrentNumberOfNodes; index++) {
             this._list.push(new HacknetServer(ns, index));
         }
@@ -70,6 +71,7 @@ export class HacknetManager {
         if(this._maxNodes === this.CurrentNumberOfNodes) {
             return undefined;
         }
+
         const extraHashesPerSecond = this.ns.formulas.hacknetServers.hashGainRate(1, 0, 1, 1, this.ns.getPlayer().hacknet_node_money_mult * this.ns.getBitNodeMultipliers().HacknetNodeMoney);
         const cost = this._hacknet.getPurchaseNodeCost();
         const valueOfUpgrade = extraHashesPerSecond / cost;

@@ -1,5 +1,5 @@
 import { NS } from "/../NetscriptDefinitions.js";
-import { SettingsObject } from "/Database/SettingsObject.js";
+import { SettingsObject } from "../database/SettingsObject.js";
 import { LogLevelEnum } from "LogLevelEnum.js";
 import { ILoggerSettings } from "/helpers/ILoggerSettings.js";
 
