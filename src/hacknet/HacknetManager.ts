@@ -39,7 +39,7 @@ export class HacknetManager {
      */
     public UpgradeMostValuedHacknetNode(): boolean {
         const upgrades: Array<HacknetUpgrade> = [];
-        let bestHacknetUpgrade: HacknetUpgrade = this.CreateHacknetUpgradeForCreate();
+        let bestHacknetUpgrade: HacknetUpgrade | undefined = this.CreateHacknetUpgradeForCreate();
 
         for (const hacknetServer of this._list) {
             upgrades.push(hacknetServer.GetBestUpgrade());
@@ -66,7 +66,10 @@ export class HacknetManager {
         return false;
     }
 
-    private CreateHacknetUpgradeForCreate(): HacknetUpgrade {
+    private CreateHacknetUpgradeForCreate(): HacknetUpgrade | undefined {
+        if(this._maxNodes === this.CurrentNumberOfNodes) {
+            return undefined;
+        }
         const extraHashesPerSecond = this.ns.formulas.hacknetServers.hashGainRate(1, 0, 1, 1, this.ns.getPlayer().hacknet_node_money_mult * this.ns.getBitNodeMultipliers().HacknetNodeMoney);
         const cost = this._hacknet.getPurchaseNodeCost();
         const valueOfUpgrade = extraHashesPerSecond / cost;
@@ -82,6 +85,11 @@ export class HacknetManager {
     }
 
     public CreateNewNode(): boolean {
+        if(this._maxNodes === this.CurrentNumberOfNodes) {
+            this._logger.LogToScriptLog(`Reached max number of nodes`, LogLevelEnum.Debug);
+            return false;
+        }
+
         this._logger.LogToScriptLog(`Player will have ${this.ns.nFormat(this.ns.getPlayer().money - this._hacknet.getPurchaseNodeCost(), '$0.000a')} remaining after purchasing new node`, LogLevelEnum.Debug);
 
         if (this.ns.getPlayer().money - this._hacknet.getPurchaseNodeCost() < this._hacknetSettings.MinMoneyToKeep) {
