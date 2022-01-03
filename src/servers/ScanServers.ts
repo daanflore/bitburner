@@ -1,17 +1,15 @@
 import { NS } from "/../NetscriptDefinitions.js";
 import { Server } from "/servers/Server.js";
+
 export async function main(ns: NS): Promise<void> {
     //ns.disableLog("ALL");
 
     const maxDepth = 15;
-
-
     const completedServers: Array<string> = [];//["home"];
     let hasChildServers = true;
     let serverIterator = ["home"];
     let currentDepth = 0;
     const servers: Array<Server> = [];
-
 
     while (currentDepth < maxDepth && hasChildServers) {
         let childServers: Array<string> = [];
@@ -55,5 +53,6 @@ export async function main(ns: NS): Promise<void> {
             ns.print("Reached max depth");
         }
     }
+
     ns.write("serverlist.txt", JSON.stringify(servers), "w");
 }
