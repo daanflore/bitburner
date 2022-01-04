@@ -1,5 +1,5 @@
 import { HacknetServer, HacknetUpgrade } from "/hacknet/HacknetInstance.js";
-import { HacknetUpgradeEnum } from "/hacknet/HacknetUpgradeEnum.js";
+import { HacknetUpgradeEnum, HacknetUpgradeStatusEnum } from "/hacknet/HacknetUpgradeEnum.js";
 import { Hacknet, NS } from "/../NetscriptDefinitions.js";
 import { HacknetSettings } from "/hacknet/HacknetSettings.js";
 import { Logger } from "/helpers/Logger.js";
@@ -29,7 +29,7 @@ export class HacknetManager {
         this._maxNodes = this._hacknet.maxNumNodes();
         this._hacknetSettings = hacknetSettings ?? new HacknetSettings(ns);
         this._logger = logger ?? new Logger(ns, this._hacknetSettings);
-        
+
         for (let index = 0; index < this.CurrentNumberOfNodes; index++) {
             this._list.push(new HacknetServer(ns, index));
         }
@@ -38,12 +38,20 @@ export class HacknetManager {
     /**
      * @returns {boolean} note if upgrade was a success
      */
-    public UpgradeMostValuedHacknetNode(): boolean {
+    public UpgradeMostValuedHacknetNode(): HacknetUpgradeStatusEnum {
         const upgrades: Array<HacknetUpgrade> = [];
         let bestHacknetUpgrade: HacknetUpgrade | undefined = this.CreateHacknetUpgradeForCreate();
 
         for (const hacknetServer of this._list) {
-            upgrades.push(hacknetServer.GetBestUpgrade());
+            const hacknetUpgrade = hacknetServer.GetBestUpgrade();
+
+            if (hacknetUpgrade !== undefined) {
+                upgrades.push(hacknetUpgrade);
+            }
+        }
+
+        if(upgrades.length === 0) {
+            return HacknetUpgradeStatusEnum.FullyUpgraded;
         }
 
         for (const hackNetUpgrade of upgrades) {
@@ -60,15 +68,20 @@ export class HacknetManager {
 
             if (remainingMoney >= this._hacknetSettings.MinMoneyToKeep) {
                 this._logger.LogToScriptLog(`Performing upgrade`, LogLevelEnum.Info);
-                return bestHacknetUpgrade.performUpgrade();
+
+                if(!bestHacknetUpgrade.performUpgrade()) {
+                    return HacknetUpgradeStatusEnum.NotEnoughMoney;
+                }
+
+                return HacknetUpgradeStatusEnum.Upgraded;
             }
         }
 
-        return false;
+        return HacknetUpgradeStatusEnum.NotEnoughMoney;
     }
 
     private CreateHacknetUpgradeForCreate(): HacknetUpgrade | undefined {
-        if(this._maxNodes === this.CurrentNumberOfNodes) {
+        if (this._maxNodes === this.CurrentNumberOfNodes) {
             return undefined;
         }
 
@@ -87,7 +100,7 @@ export class HacknetManager {
     }
 
     public CreateNewNode(): boolean {
-        if(this._maxNodes === this.CurrentNumberOfNodes) {
+        if (this._maxNodes === this.CurrentNumberOfNodes) {
             this._logger.LogToScriptLog(`Reached max number of nodes`, LogLevelEnum.Debug);
             return false;
         }

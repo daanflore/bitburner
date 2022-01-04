@@ -4,6 +4,7 @@ import { HacknetManager } from '/hacknet/HacknetManager.js';
 import { HacknetSettings } from "/hacknet/HacknetSettings.js";
 import { Logger } from "/helpers/Logger.js";
 import { LogLevelEnum } from "/LogLevelEnum.js";
+import { HacknetUpgradeStatusEnum } from "./HacknetUpgradeEnum";
 
 export async function main(ns: NS): Promise<void> {
     ns.disableLog("ALL");
@@ -21,7 +22,19 @@ export async function main(ns: NS): Promise<void> {
         logger.AddIndent();
         hacknetManager.CreateNewNode();
         const sleepDuration = 100;
-        const numberOfLoops = hacknetManager.UpgradeMostValuedHacknetNode() ? 1 : 60000 / sleepDuration;
+        const hacknetUpgradeStatus = hacknetManager.UpgradeMostValuedHacknetNode();
+
+        let numberOfLoops = 1;
+
+        if (HacknetUpgradeStatusEnum.Upgraded === hacknetUpgradeStatus) {
+            numberOfLoops = 1;
+        } else if (HacknetUpgradeStatusEnum.NotEnoughMoney === hacknetUpgradeStatus)  {
+            numberOfLoops = 60000 / sleepDuration;
+        } else if (HacknetUpgradeStatusEnum.FullyUpgraded === hacknetUpgradeStatus) {
+            ns.spawn("/hacknet/HashSpender.js");
+        }
+
+        numberOfLoops = hacknetUpgradeStatus === HacknetUpgradeStatusEnum.Upgraded ? 1 : 60000 / sleepDuration;
         logger.RemoveIndent();
         logger.LogToScriptLog(`wait ${numberOfLoops * sleepDuration} milliseconds before trying next upgrade`, LogLevelEnum.Info);
 

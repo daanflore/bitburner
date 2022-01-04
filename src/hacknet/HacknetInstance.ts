@@ -8,7 +8,7 @@ import { Hacknet, NS } from '../../NetscriptDefinitions';
 import { HacknetUpgradeEnum } from '../hacknet/HacknetUpgradeEnum.js';
 
 export abstract class HacknetInstance {
-    public abstract GetBestUpgrade(): HacknetUpgrade;
+    public abstract GetBestUpgrade(): HacknetUpgrade | undefined;
     public abstract PerformUpgrade(type: HacknetUpgradeEnum): void;
 }
 
@@ -49,11 +49,11 @@ export class HacknetServer extends HacknetInstance {
         this.hacknet = ns.hacknet;
     }
 
-    public GetBestUpgrade(): HacknetUpgrade {
-        let bestUpgrade: HacknetUpgrade = this.GetRamHashGain();
+    public GetBestUpgrade(): HacknetUpgrade | undefined {
+        let bestUpgrade: HacknetUpgrade | undefined;
 
-        for (const hackNetUpgrade of [this.GetLevelHashGain(), this.GetCoreHashGain()]) {
-            if (bestUpgrade.valueOfUpgrade < hackNetUpgrade.valueOfUpgrade) {
+        for (const hackNetUpgrade of [this.GetRamHashGain(), this.GetLevelHashGain(), this.GetCoreHashGain()]) {
+            if (bestUpgrade !== undefined && hackNetUpgrade !== undefined && bestUpgrade.valueOfUpgrade < hackNetUpgrade.valueOfUpgrade) {
                 bestUpgrade = hackNetUpgrade;
             }
         }
@@ -84,15 +84,15 @@ export class HacknetServer extends HacknetInstance {
         throw new Error("No Valid upgradeType");
     }
 
-    private GetRamHashGain(): HacknetUpgrade {
+    private GetRamHashGain(): HacknetUpgrade | undefined {
         return this.GetUpgradedHashGain(HacknetUpgradeEnum.Ram);
     }
 
-    private GetLevelHashGain(): HacknetUpgrade {
+    private GetLevelHashGain(): HacknetUpgrade | undefined {
         return this.GetUpgradedHashGain(HacknetUpgradeEnum.Level);
     }
 
-    private GetCoreHashGain(): HacknetUpgrade {
+    private GetCoreHashGain(): HacknetUpgrade | undefined {
         return this.GetUpgradedHashGain(HacknetUpgradeEnum.Core);
     }
 
@@ -109,7 +109,13 @@ export class HacknetServer extends HacknetInstance {
         throw new Error("No Valid upgradeType");
     }
 
-    private GetUpgradedHashGain(upgradeType: HacknetUpgradeEnum): HacknetUpgrade {
+    private GetUpgradedHashGain(upgradeType: HacknetUpgradeEnum): HacknetUpgrade | undefined {
+        const upgradeCost = this.GetUpgradeCost(upgradeType);
+
+        if (isFinite(upgradeCost)) {
+            return undefined;
+        }
+
         const currentHashGain = this.ns.formulas.hacknetServers.hashGainRate(this.Level, this.RamUsed, this.Ram, this.Cores, this.ns.getPlayer().hacknet_node_money_mult * this.ns.getBitNodeMultipliers().HacknetNodeMoney);
         const level = upgradeType === HacknetUpgradeEnum.Level ? this.Level + 1 : this.Level;
         const ram = upgradeType === HacknetUpgradeEnum.Ram ? Math.pow(2, this.RamLevel + 1) : this.Ram;
@@ -117,7 +123,6 @@ export class HacknetServer extends HacknetInstance {
         const multipler = this.ns.getPlayer().hacknet_node_money_mult * this.ns.getBitNodeMultipliers().HacknetNodeMoney;
         const numberOfHashes = this.ns.formulas.hacknetServers.hashGainRate(level, this.RamUsed, ram, cores, multipler);
         const diffHashesPerSecond = numberOfHashes - currentHashGain;
-        const upgradeCost = this.GetUpgradeCost(upgradeType);
         const valueOfUpgrade = diffHashesPerSecond / upgradeCost;
 
         return {
@@ -128,6 +133,7 @@ export class HacknetServer extends HacknetInstance {
             valueOfUpgrade: valueOfUpgrade,
             performUpgrade: () => this.PerformUpgrade(upgradeType),
         };
+
     }
 }
 
