@@ -22,6 +22,7 @@ export async function main(ns: NS): Promise<void> {
 
     while (true) {
         try {
+            serverManger.ReleadAllServers();
             const server = getBestServer(serverManger.GetServers((server) => server.maxMoney > 0 && server.hackLevel <= ns.getHackingLevel() && server.hasRoot));
             const headers: string[] = [];
             const values: string[] = [];
