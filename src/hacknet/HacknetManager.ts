@@ -50,7 +50,7 @@ export class HacknetManager {
             }
         }
 
-        if(upgrades.length === 0) {
+        if (upgrades.length === 0 && bestHacknetUpgrade === undefined) {
             return HacknetUpgradeStatusEnum.FullyUpgraded;
         }
 
@@ -69,7 +69,7 @@ export class HacknetManager {
             if (remainingMoney >= this._hacknetSettings.MinMoneyToKeep) {
                 this._logger.LogToScriptLog(`Performing upgrade`, LogLevelEnum.Info);
 
-                if(!bestHacknetUpgrade.performUpgrade()) {
+                if (!bestHacknetUpgrade.performUpgrade()) {
                     return HacknetUpgradeStatusEnum.NotEnoughMoney;
                 }
 
