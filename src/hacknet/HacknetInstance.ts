@@ -53,7 +53,7 @@ export class HacknetServer extends HacknetInstance {
         let bestUpgrade: HacknetUpgrade | undefined;
 
         for (const hackNetUpgrade of [this.GetRamHashGain(), this.GetLevelHashGain(), this.GetCoreHashGain()]) {
-            if (bestUpgrade !== undefined && hackNetUpgrade !== undefined && bestUpgrade.valueOfUpgrade < hackNetUpgrade.valueOfUpgrade) {
+            if ((bestUpgrade === undefined && hackNetUpgrade !== undefined) || (bestUpgrade !== undefined && hackNetUpgrade !== undefined && bestUpgrade.valueOfUpgrade < hackNetUpgrade.valueOfUpgrade)) {
                 bestUpgrade = hackNetUpgrade;
             }
         }
@@ -112,7 +112,7 @@ export class HacknetServer extends HacknetInstance {
     private GetUpgradedHashGain(upgradeType: HacknetUpgradeEnum): HacknetUpgrade | undefined {
         const upgradeCost = this.GetUpgradeCost(upgradeType);
 
-        if (isFinite(upgradeCost)) {
+        if (!isFinite(upgradeCost)) {
             return undefined;
         }
 
