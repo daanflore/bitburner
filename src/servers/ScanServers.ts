@@ -47,6 +47,7 @@ export async function main(ns: NS): Promise<void> {
         }
 
         database.SetItem(ServerDbInfo.keys.all, servers);
+        database.SetItem(ServerDbInfo.keys.nonHackNode, servers.filter(serverinfo => !serverinfo.name.startsWith("hacknet-node-")));
         await ns.sleep(100);
     }
 }

@@ -36,6 +36,7 @@ export class ServerInfo {
 export const ServerDbInfo = {
     Name: "Server",
     keys: {
-        all: "Servers"
+        all: "Servers",
+        nonHackNode: "NonHackNode"
     }
 };

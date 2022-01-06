@@ -1,12 +1,13 @@
 import { NS } from '../../NetscriptDefinitions.js';
-import { ServerInfo } from '/servers/ServerInfo.js';
-import { ServerManager } from '/servers/ServerManager.js';
+import { IDatabase } from '/database/IDatabase.js';
+import { LocalStorageDatabase } from '/database/LocalStorageDatabase.js';
+import { ServerDbInfo, ServerInfo } from '/servers/ServerInfo.js';
 
 /** @param {NS} ns **/
 export async function main(ns: NS): Promise<void> {
     ns.disableLog("ALL");
     const args = ns.flags([["help", false]]);
-    const serverManger = new ServerManager(ns);
+    const database: IDatabase = new LocalStorageDatabase(ns, ServerDbInfo.Name);
     
     if (args.help) {
         ns.tprint("This script will enhance your HUD (Heads up Display) with custom statistics.");
@@ -22,8 +23,8 @@ export async function main(ns: NS): Promise<void> {
 
     while (true) {
         try {
-            serverManger.ReleadAllServers();
-            const server = getBestServer(serverManger.GetServers((server) => server.maxMoney > 0 && server.hackLevel <= ns.getHackingLevel() && server.hasRoot));
+
+            const server = getBestServer(database.GetItem<Array<ServerInfo>>(ServerDbInfo.keys.nonHackNode)?.filter((server) => server.maxMoney > 0 && server.hackLevel <= ns.getHackingLevel() && server.hasRoot)?? []);
             const headers: string[] = [];
             const values: string[] = [];
             const scriptIncome = ns.getScriptIncome();

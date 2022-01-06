@@ -1,12 +1,14 @@
 import { NS } from '/../NetscriptDefinitions.js';
-import { ServerManager } from '/servers/ServerManager.js';
+import { IDatabase } from '/database/IDatabase.js';
+import { LocalStorageDatabase } from '/database/LocalStorageDatabase.js';
+import { ServerDbInfo, ServerInfo } from '/servers/ServerInfo.js';
 
 
 export async function main(ns: NS): Promise<void> {
     ns.disableLog("ALL");
     ns.clearLog();
     ns.tail();
-    const serverManger = new ServerManager(ns);
+    const database: IDatabase = new LocalStorageDatabase(ns, ServerDbInfo.Name);
     const flags = ns.flags([
         ["loop", false],
         ["script", ""],
@@ -19,7 +21,6 @@ export async function main(ns: NS): Promise<void> {
 
     if (flags.loop) {
         while (true) {
-            serverManger.ReleadAllServers();
             await RunHackAllServers(false);
             await ns.sleep(10000);
         }
@@ -29,7 +30,7 @@ export async function main(ns: NS): Promise<void> {
 
 
     async function RunHackAllServers(killScript: boolean): Promise<void> {
-        const servers = await serverManger.GetServers((checkServer) => !checkServer.name.startsWith("hacknet-node-"));
+        const servers = database.GetItem<Array<ServerInfo>>(ServerDbInfo.keys.nonHackNode) ?? [];
 
         for (const server of servers) {
             ns.print("Checking: " + server.name);
