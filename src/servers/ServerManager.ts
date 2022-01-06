@@ -1,8 +1,8 @@
 import { NS } from "/../NetscriptDefinitions.js";
-import { Server } from '/servers/Server.js';
+import { ServerInfo } from '/servers/ServerInfo.js';
 
 export class ServerManager {
-    private Servers: Array<Server> = [];
+    private Servers: Array<ServerInfo> = [];
     /**
      *
      */
@@ -18,28 +18,7 @@ export class ServerManager {
         this.Servers = [];
 
         while (hasChildServers) {
-            let childServers: Array<string> = [];
-
-            for (let i = 0; i < serverIterator.length; i++) {
-                const current = serverIterator[i];
-                const portsReq = this._ns.getServerNumPortsRequired(current);
-                const srv = new Server(current, portsReq);
-                srv.maxMoney = this._ns.getServerMaxMoney(current);
-                srv.growTime = this._ns.getGrowTime(current);
-                srv.weakenTime = this._ns.getWeakenTime(current);
-                srv.hackTime = this._ns.getHackTime(current);
-                srv.growth = this._ns.getServerGrowth(current);
-                srv.minSec = this._ns.getServerMinSecurityLevel(current);
-                srv.hackLevel = this._ns.getServerRequiredHackingLevel(current);
-                srv.money = this._ns.getServerMoneyAvailable(current);
-                srv.security = this._ns.getServerSecurityLevel(current);
-                srv.maxRam = this._ns.getServerMaxRam(current);
-                srv.hasRoot = this._ns.hasRootAccess(current);
-                this.Servers.push(srv);
-                childServers = childServers.concat(this._ns.scan(current));
-                completedServers.push(current);
-            }
-
+            const childServers: Array<string> = [];
             serverIterator = childServers.filter(function (el) {
                 return !completedServers.includes(el);
             });
@@ -57,7 +36,7 @@ export class ServerManager {
         }
     }
 
-    public GetServers(filter?:(value: Server, index: number, array: Server[]) => boolean): Array<Server> {
+    public GetServers(filter?:(value: ServerInfo, index: number, array: ServerInfo[]) => boolean): Array<ServerInfo> {
         if (filter !== undefined) {
             return this.Servers.filter(filter);
         } else {

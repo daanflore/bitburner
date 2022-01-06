@@ -2,19 +2,22 @@ import { IDatabase } from "/database/IDatabase.js";
 import { NS } from "/../NetscriptDefinitions.js";
 
 export class LocalStorageDatabase implements IDatabase {
-    private _callBack: (e: StorageEvent) => void;
+    private _callBack: ((e: StorageEvent) => void) | undefined = undefined;
     /**
      *
      */
-    constructor(private _ns: NS, private _databaseName: string, callback: (key: string | undefined, value: string | null) => void) {
+    constructor(private _ns: NS, private _databaseName: string, callback?: (key: string | undefined, value: string | null) => void) {
         const windowHandle = eval('window');
-        this._callBack = function (e: StorageEvent) {
-            if (e.key?.startsWith(_databaseName)) {
-                return callback(e.key.split('-').at(-1), e.newValue);
-            }
-        };
-        _ns.atExit(() => windowHandle.removeEventListener('storage', this._callBack));
-        windowHandle.addEventListener('storage', this._callBack);
+
+        if (callback !== undefined) {
+            this._callBack = function (e: StorageEvent) {
+                if (e.key?.startsWith(_databaseName)) {
+                    return callback(e.key.split('-').at(-1), e.newValue);
+                }
+            };
+            _ns.atExit(() => windowHandle.removeEventListener('storage', this._callBack));
+            windowHandle.addEventListener('storage', this._callBack);
+        }
     }
 
     public GetItem<T>(key: string): T | null {

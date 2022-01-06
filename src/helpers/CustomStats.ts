@@ -1,5 +1,5 @@
 import { NS } from '../../NetscriptDefinitions.js';
-import { Server } from '/servers/Server.js';
+import { ServerInfo } from '/servers/ServerInfo.js';
 import { ServerManager } from '/servers/ServerManager.js';
 
 /** @param {NS} ns **/
@@ -56,8 +56,8 @@ export async function main(ns: NS): Promise<void> {
         await ns.sleep(1000);
     }
 
-    function getBestServer(servers: Array<Server>): Server | undefined {
-        let bestServer: Server | undefined;
+    function getBestServer(servers: Array<ServerInfo>): ServerInfo | undefined {
+        let bestServer: ServerInfo | undefined;
 
         for(const server of servers) {
             if(bestServer === undefined || bestServer.maxMoney < server.maxMoney) {

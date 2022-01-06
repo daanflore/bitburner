@@ -13,8 +13,7 @@ export async function main(ns: NS): Promise<void> {
     const hacknetSettings = new HacknetSettings(ns);
     const logger = new Logger(ns, hacknetSettings);
     const hacknetManager = new HacknetManager(ns, hacknetSettings, logger);
-    const hashManager = new HashManager(ns, hacknetSettings);
-
+    const hashManager = new HashManager(ns, hacknetSettings, logger);
     logger.LogToScriptLog("Starting log", LogLevelEnum.Info);
 
     while (true) {
@@ -28,7 +27,7 @@ export async function main(ns: NS): Promise<void> {
 
         if (HacknetUpgradeStatusEnum.Upgraded === hacknetUpgradeStatus) {
             numberOfLoops = 1;
-        } else if (HacknetUpgradeStatusEnum.NotEnoughMoney === hacknetUpgradeStatus)  {
+        } else if (HacknetUpgradeStatusEnum.NotEnoughMoney === hacknetUpgradeStatus) {
             numberOfLoops = 60000 / sleepDuration;
         } else if (HacknetUpgradeStatusEnum.FullyUpgraded === hacknetUpgradeStatus) {
             ns.spawn("/hacknet/HashSpender.js");
@@ -37,15 +36,19 @@ export async function main(ns: NS): Promise<void> {
         numberOfLoops = hacknetUpgradeStatus === HacknetUpgradeStatusEnum.Upgraded ? 1 : 60000 / sleepDuration;
         logger.RemoveIndent();
         logger.LogToScriptLog(`wait ${numberOfLoops * sleepDuration} milliseconds before trying next upgrade`, LogLevelEnum.Info);
+        logger.AddIndent();
 
         for (let loop = 0; loop < numberOfLoops; loop++) {
             SpendHashes();
             await ns.sleep(sleepDuration);
         }
+
+        logger.RemoveIndent();
     }
 
     function SpendHashes(): void {
         let hasMoneyBeenUsed = true;
+
         while (hashManager.CheckReachedHashLimit() && hasMoneyBeenUsed) {
             if (!hashManager.SpendHashes(hacknetSettings.UpgradeName, hacknetSettings.Target)) {
                 if (!hashManager.SpendHashes("Sell for Money")) {

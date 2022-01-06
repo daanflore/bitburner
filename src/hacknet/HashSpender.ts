@@ -13,9 +13,10 @@ export async function main(ns: NS): Promise<void> {
 
     function SpendHashes(): void {
         let hasMoneyBeenUsed = true;
-        while (hashManager.CheckReachedHashLimit() && hasMoneyBeenUsed) {
+
+        while (hashManager.CheckHasMinimumHashesStored() && hasMoneyBeenUsed) {
             if (!hashManager.SpendHashes(hacknetSettings.UpgradeName, hacknetSettings.Target)) {
-                if (!hashManager.SpendHashes("Sell for Money")) {
+                if (hashManager.CheckReachedHashLimit() && !hashManager.SpendHashes("Sell for Money")) {
                     hasMoneyBeenUsed = false;
                 }
             }
