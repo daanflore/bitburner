@@ -7,18 +7,20 @@ export async function main(ns: NS): Promise<void> {
     const hashManager = new HashManager(ns, hacknetSettings);
 
     while (true) {
-        SpendHashes();
+        SpendHashes(hashManager, hacknetSettings);
         await ns.sleep(1000);
     }
+}
 
-    function SpendHashes(): void {
-        let hasMoneyBeenUsed = true;
-
-        while (hashManager.CheckHasMinimumHashesStored() && hasMoneyBeenUsed) {
-            if (!hashManager.SpendHashes(hacknetSettings.UpgradeName, hacknetSettings.Target)) {
-                if (hashManager.CheckReachedHashLimit() && !hashManager.SpendHashes("Sell for Money")) {
-                    hasMoneyBeenUsed = false;
-                }
+export function SpendHashes(hashManager: HashManager, hacknetSettings: HacknetSettings): void {
+    let hasMoneyBeenUsed = true;
+    
+    while (hashManager.CheckHasMinimumHashesStored() && hasMoneyBeenUsed) {
+        if (!hashManager.SpendHashes(hacknetSettings.UpgradeName, hacknetSettings.Target)) {
+            if (hashManager.CheckReachedHashLimit()) {
+                hasMoneyBeenUsed = hashManager.SpendHashes("Sell for Money");
+            } else {
+                hasMoneyBeenUsed = false;
             }
         }
     }

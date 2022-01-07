@@ -35,49 +35,54 @@ export async function main(ns: NS): Promise<void> {
         for (const server of servers) {
             ns.print("Checking: " + server.name);
             ns.print(`script ${script}`);
-            let targetServer = ns.getServer(server.name);
 
-            if (!targetServer.sshPortOpen && ns.fileExists("BruteSSH.exe")) {
+            if (!server.openPortsTool.sshPortOpen && ns.fileExists("BruteSSH.exe")) {
                 ns.brutessh(server.name);
+                server.openPortsTool.sshPortOpen = true;
+                server.openPorts += 1;
             }
 
-            if (!targetServer.ftpPortOpen && ns.fileExists("FTPCrack.exe")) {
+            if (!server.openPortsTool.ftpPortOpen && ns.fileExists("FTPCrack.exe")) {
                 ns.ftpcrack(server.name);
+                server.openPortsTool.ftpPortOpen = true;
+                server.openPorts += 1;
             }
 
-            if (!targetServer.smtpPortOpen && ns.fileExists("relaySMTP.exe")) {
+            if (!server.openPortsTool.smtpPortOpen && ns.fileExists("relaySMTP.exe")) {
                 ns.relaysmtp(server.name);
+                server.openPortsTool.smtpPortOpen = true;
+                server.openPorts += 1;
             }
 
-            if (!targetServer.httpPortOpen && ns.fileExists("HTTPWorm.exe")) {
+            if (!server.openPortsTool.httpPortOpen && ns.fileExists("HTTPWorm.exe")) {
                 ns.httpworm(server.name);
+                server.openPortsTool.httpPortOpen = true;
+                server.openPorts += 1;
             }
 
-            if (!targetServer.sqlPortOpen && ns.fileExists("SQLInject.exe")) {
+            if (!server.openPortsTool.sqlPortOpen && ns.fileExists("SQLInject.exe")) {
                 ns.sqlinject(server.name);
+                server.openPortsTool.sqlPortOpen = true;
+                server.openPorts += 1;
             }
 
-            ns.print("reget server");
-            targetServer = ns.getServer(server.name);
-
-            if (!targetServer.hasAdminRights) {
-                ns.print("Open ports " + targetServer.openPortCount + " Needed ports: " + targetServer.numOpenPortsRequired);
-                if (targetServer.openPortCount >= targetServer.numOpenPortsRequired) {
+            if (!server.hasRoot) {
+                ns.print("Open ports " + server.openPorts + " Needed ports: " + server.portsReq);
+                if (server.openPorts >= server.portsReq) {
                     ns.nuke(server.name);
-                    targetServer = ns.getServer(server.name);
-
+                    server.hasRoot = true;
                 } else {
                     ns.print("Need more ports open");
                 }
             }
 
-            if (targetServer.requiredHackingSkill <= ns.getPlayer().hacking) {
-                if (targetServer.moneyMax !== 0) {
-                    if (targetServer.hasAdminRights && targetServer.requiredHackingSkill <= ns.getPlayer().hacking) {
-                        if (targetServer.maxRam > 0) {
-                            await KillAndRunScript(server.name, script, killScript);
+            if (server.hackLevel <= ns.getPlayer().hacking) {
+                if (server.maxMoney !== 0) {
+                    if (server.hasRoot && server.hackLevel <= ns.getPlayer().hacking) {
+                        if (server.maxRam > 0) {
+                            await KillAndRunScript(server, script, killScript);
                         } else {
-                            await BuyServerAndRunScript(server.name, script, flags.serverRam, killScript);
+                           //await BuyServerAndRunScript(server.name, script, flags.serverRam, killScript);
                         }
                     }
                     else {
@@ -92,30 +97,30 @@ export async function main(ns: NS): Promise<void> {
         }
     }
 
-    async function KillAndRunScript(server: string, script: string, killScript: boolean, ...scriptArgs: (string | number | boolean)[]): Promise<void> {
+    async function KillAndRunScript(server: ServerInfo, script: string, killScript: boolean, ...scriptArgs: (string | number | boolean)[]): Promise<void> {
         if (killScript) {
-            if (ns.scriptKill(script, server)) {
-                ns.print("Ram: " + ns.getServerUsedRam(server));
+            if (ns.scriptKill(script, server.name)) {
+                ns.print("Ram: " + server.usedRam);
             } else {
                 ns.print("No script killed");
             }
         } else {
             ns.print("Kill flag is false");
         }
-        const targetServer = ns.getServer(server);
-        ns.print(`server max ram ${targetServer.maxRam} - server used ram ${ns.getServerUsedRam(server)} - script used ram ${ns.getScriptRam(script, server)}`);
-        const threads = Math.floor((targetServer.maxRam - ns.getServerUsedRam(server)) / ns.getScriptRam(script, server));
+
+        ns.print(`server max ram ${server.maxRam} - server used ram ${ns.getServerUsedRam(server.name)} - script used ram ${ns.getScriptRam(script, server.name)}`);
+        const threads = Math.floor((server.maxRam - ns.getServerUsedRam(server.name)) / ns.getScriptRam(script, server.name));
 
         if (threads > 0) {
             ns.print("Starting script: " + script);
-            await ns.scp(script, "home", server);
-            ns.exec(script, server, threads, ...scriptArgs);
+            await ns.scp(script, "home", server.name);
+            ns.exec(script, server.name, threads, ...scriptArgs);
         } else {
             ns.print("not enough threads");
         }
     }
 
-    async function BuyServerAndRunScript(server: string, script: string, ram: number, killScript: boolean): Promise<void> {
+    /*async function BuyServerAndRunScript(server: string, script: string, ram: number, killScript: boolean): Promise<void> {
         ns.print(`Getting server`);
         let servers = ns.getPurchasedServers();
         ns.print(servers);
@@ -145,5 +150,5 @@ export async function main(ns: NS): Promise<void> {
         }
 
         await KillAndRunScript(serverToUse, script, killScript, server);
-    }
+    }*/
 }

@@ -12,7 +12,7 @@ export class LocalStorageDatabase implements IDatabase {
         if (callback !== undefined) {
             this._callBack = function (e: StorageEvent) {
                 if (e.key?.startsWith(_databaseName)) {
-                    return callback(e.key.split('-').at(-1), e.newValue);
+                    return callback(e.key.split('-').at(-1), e.newValue !== null? JSON.parse(e.newValue) : e.newValue);
                 }
             };
             _ns.atExit(() => windowHandle.removeEventListener('storage', this._callBack));

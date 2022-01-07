@@ -15,6 +15,13 @@ export class ServerInfo {
     cores: number;
     openPorts: number;
     playerServer: boolean;
+    openPortsTool: {
+        sshPortOpen: boolean;
+        ftpPortOpen: boolean;
+        smtpPortOpen: boolean;
+        httpPortOpen: boolean;
+        sqlPortOpen: boolean;
+    }
 
     constructor(server: Server) {
         this.name = server.hostname;
@@ -30,6 +37,13 @@ export class ServerInfo {
         this.maxRam = server.maxRam;
         this.usedRam = server.ramUsed;
         this.playerServer = server.purchasedByPlayer;
+        this.openPortsTool = {
+            sshPortOpen: server.sshPortOpen,
+            ftpPortOpen: server.ftpPortOpen,
+            smtpPortOpen: server.smtpPortOpen,
+            httpPortOpen: server.httpPortOpen,
+            sqlPortOpen: server.sqlPortOpen
+        };
     }
 }
 

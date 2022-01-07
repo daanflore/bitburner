@@ -5,6 +5,7 @@ import { HacknetSettings } from "/hacknet/HacknetSettings.js";
 import { Logger } from "/helpers/Logger.js";
 import { LogLevelEnum } from "/LogLevelEnum.js";
 import { HacknetUpgradeStatusEnum } from "./HacknetUpgradeEnum";
+import { SpendHashes } from "/hacknet/HashSpender.js";
 
 export async function main(ns: NS): Promise<void> {
     ns.disableLog("ALL");
@@ -39,22 +40,10 @@ export async function main(ns: NS): Promise<void> {
         logger.AddIndent();
 
         for (let loop = 0; loop < numberOfLoops; loop++) {
-            SpendHashes();
+            await SpendHashes(hashManager, hacknetSettings);
             await ns.sleep(sleepDuration);
         }
 
         logger.RemoveIndent();
-    }
-
-    function SpendHashes(): void {
-        let hasMoneyBeenUsed = true;
-
-        while (hashManager.CheckReachedHashLimit() && hasMoneyBeenUsed) {
-            if (!hashManager.SpendHashes(hacknetSettings.UpgradeName, hacknetSettings.Target)) {
-                if (!hashManager.SpendHashes("Sell for Money")) {
-                    hasMoneyBeenUsed = false;
-                }
-            }
-        }
     }
 }
