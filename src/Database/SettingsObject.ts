@@ -17,7 +17,11 @@ export abstract class SettingsObject {
     protected ReadValuesFromDatabase(): void {
         for (const prop of Object.keys(this)) {
             if (!prop.startsWith("_")) {
-                this[prop] = this._database.GetItem(prop);
+                const value = this._database.GetItem(prop);
+
+                if (value !== null) {
+                    this[prop] = value;
+                }
             }
         }
     }
