@@ -1,3 +1,4 @@
+import { hostname } from 'os';
 import { NS } from '../../NetscriptDefinitions.js';
 import { IDatabase } from '/database/IDatabase.js';
 import { LocalStorageDatabase } from '/database/LocalStorageDatabase.js';
@@ -23,7 +24,6 @@ export async function main(ns: NS): Promise<void> {
 
     while (true) {
         try {
-
             const server = getBestServer(database.GetItem<Array<ServerInfo>>(ServerDbInfo.keys.nonHackNode)?.filter((server) => server.maxMoney > 0 && server.hackLevel <= ns.getHackingLevel() && server.hasRoot)?? []);
             const headers: string[] = [];
             const values: string[] = [];
@@ -48,6 +48,8 @@ export async function main(ns: NS): Promise<void> {
                 headers.push(ns.nFormat(server.maxMoney, "$0.0a"));
             }
 
+            headers.push(...ShowRamUsage("home"));
+
             // Now drop it into the placeholder elements
             hook0.innerText = headers.join(" \n");
             hook1.innerText = values.join("\n");
@@ -67,5 +69,16 @@ export async function main(ns: NS): Promise<void> {
         }
 
         return bestServer;        
+    }
+
+    function ShowRamUsage(server: string): string[] {
+        const info: string[] = [];
+        info.push(`${server} RAM usage`);
+        
+        for (const processInfo of ns.ps()){
+            info.push(`${processInfo.filename} (${ns.getScriptRam(processInfo.filename, server) * processInfo.threads}GB)`);
+        }
+
+        return info;
     }
 }

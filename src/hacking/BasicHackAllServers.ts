@@ -21,8 +21,6 @@ export async function main(ns: NS): Promise<void> {
 
     const database: IDatabase = new LocalStorageDatabase(ns, ServerDbInfo.Name);
 
-
-
     const script = flags.script;
     ns.print(`script ${script}`);
 

@@ -10,10 +10,14 @@ export async function main(ns: NS): Promise<void> {
     const result = eval("window").confirm("Do you want to delete all the files? " + arr.join(", "));
     if (result) {
         for (const i in arr) {
-            if (ns.rm(arr[i]))
+            if (ns.rm(arr[i])) {
                 ns.tprint("successfully deleted " + arr[i]);
-            else
+            }
+            else {
                 ns.tprint("failed to delete " + arr[i]);
+            }
+
+            await ns.sleep(0);
         }
     }
 }
