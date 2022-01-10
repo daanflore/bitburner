@@ -5,15 +5,22 @@ import { ServerDbInfo, ServerInfo } from '/servers/ServerInfo.js';
 
 
 export async function main(ns: NS): Promise<void> {
-    ns.disableLog("ALL");
-    ns.clearLog();
-    ns.tail();
-    const database: IDatabase = new LocalStorageDatabase(ns, ServerDbInfo.Name);
     const flags = ns.flags([
         ["loop", false],
         ["script", ""],
-        ["serverRam", 64]
+        ["serverRam", 64],
+        ["tail", false]
     ]);
+
+    ns.disableLog("ALL");
+    ns.clearLog();
+
+    if (flags.tail) {
+        ns.tail();
+    }
+
+    const database: IDatabase = new LocalStorageDatabase(ns, ServerDbInfo.Name);
+
 
 
     const script = flags.script;
@@ -82,7 +89,7 @@ export async function main(ns: NS): Promise<void> {
                         if (server.maxRam > 0) {
                             await KillAndRunScript(server, script, killScript);
                         } else {
-                           //await BuyServerAndRunScript(server.name, script, flags.serverRam, killScript);
+                            //await BuyServerAndRunScript(server.name, script, flags.serverRam, killScript);
                         }
                     }
                     else {
