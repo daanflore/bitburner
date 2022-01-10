@@ -18,11 +18,9 @@ export class CrimeManager {
         for (const crimeName of CrimeValues) {
             crimes.push(this._ns.getCrimeStats(crimeName));
         }
+
         const sortFunction = priority === "karma" ? this.SortOnKarma : this.SortOnMoneyPerSecond;
-
-
         crimes = crimes.sort(sortFunction);
-        console.log(crimes);
 
         for (const crime of crimes) {
             if(this._ns.getCrimeChance(crime.type) >= this._crimeSettings.MinSuccessRate){

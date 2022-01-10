@@ -10,7 +10,6 @@ import { SpendHashes } from "/hacknet/HashSpender.js";
 export async function main(ns: NS): Promise<void> {
     ns.disableLog("ALL");
     ns.clearLog();
-
     const hacknetSettings = new HacknetSettings(ns);
     const logger = new Logger(ns, hacknetSettings);
     const hacknetManager = new HacknetManager(ns, hacknetSettings, logger);
