@@ -1,7 +1,7 @@
 import { NS } from '/../NetscriptDefinitions.js';
 
 export async function main(ns: NS): Promise<void> {
-    //ns.disableLog("ALL");
+    ns.disableLog("ALL");
     const hashes: any = {};
 
     const files = ns.ls('home', '.js');
