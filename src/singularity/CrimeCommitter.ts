@@ -1,6 +1,6 @@
 /* eslint-disable no-alert */
-import { CrimeManager } from '/singularity/CrimeManager.js';
-import { CrimeSettings } from '/singularity/CrimeSettings.js';
+import { CrimeManager } from 'singularity/CrimeManager.js';
+import { CrimeSettings } from 'singularity/CrimeSettings.js';
 import { NS } from '/../NetscriptDefinitions.js';
 
 export async function main(ns : NS) : Promise<void> {

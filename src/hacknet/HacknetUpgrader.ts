@@ -1,11 +1,11 @@
-import { HashManager } from "/hacknet/HashManager.js";
+import { HashManager } from "hacknet/HashManager.js";
 import { NS } from "/../NetscriptDefinitions.js";
-import { HacknetManager } from '/hacknet/HacknetManager.js';
-import { HacknetSettings } from "/hacknet/HacknetSettings.js";
-import { Logger } from "/helpers/Logger.js";
-import { LogLevelEnum } from "/LogLevelEnum.js";
-import { HacknetUpgradeStatusEnum } from "./HacknetUpgradeEnum";
-import { SpendHashes } from "/hacknet/HashSpender.js";
+import { HacknetManager } from 'hacknet/HacknetManager.js';
+import { HacknetSettings } from "hacknet/HacknetSettings.js";
+import { Logger } from "helpers/Logger.js";
+import { LogLevelEnum } from "LogLevelEnum.js";
+import { HacknetUpgradeStatusEnum } from "hacknet/HacknetUpgradeEnum.js";
+import { SpendHashes } from "hacknet/HashSpender.js";
 
 export async function main(ns: NS): Promise<void> {
     ns.disableLog("ALL");

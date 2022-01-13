@@ -1,7 +1,7 @@
 import { NS } from "/../NetscriptDefinitions.js";
-import { SettingsObject } from "/database/SettingsObject.js";
+import { SettingsObject } from "database/SettingsObject.js";
 import { LogLevelEnum } from "LogLevelEnum.js";
-import { ILoggerSettings } from "/helpers/ILoggerSettings.js";
+import { ILoggerSettings } from "helpers/ILoggerSettings.js";
 
 export class HackSettings extends SettingsObject implements ILoggerSettings {
     public MoneyThresholMulitplier: number;

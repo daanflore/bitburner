@@ -1,4 +1,4 @@
-import { NS } from '../NetscriptDefinitions';
+import { NS } from '/../NetscriptDefinitions.js';
 
 export async function main(ns: NS): Promise<void> {
     console.log(ns.getPlayer().location);

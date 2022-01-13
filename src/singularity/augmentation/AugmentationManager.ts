@@ -13,7 +13,6 @@ export class AugmentationManager {
      * GetInstalledAugmentations: string []   */
     public GetInstalledAugmentations(): string[] {
         return this._ns.getOwnedAugmentations(true);
-        //return this._ns.getPlayer().factions;
     }
 
     public GetAugmentationsToInstall(): Augmentation[] {

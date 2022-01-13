@@ -1,4 +1,4 @@
-import { NS, ProcessInfo } from '../NetscriptDefinitions';
+import { NS } from '/../NetscriptDefinitions.js';
 
 export async function main(ns: NS): Promise<void> {
     //ns.disableLog("ALL");

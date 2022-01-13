@@ -1,6 +1,6 @@
 import { NS } from "/../NetscriptDefinitions.js";
 import { LogLevelEnum } from "LogLevelEnum.js";
-import { ILoggerSettings } from "/helpers/ILoggerSettings.js";
+import { ILoggerSettings } from "helpers/ILoggerSettings.js";
 
 export class Logger {
     private _indents = 0;

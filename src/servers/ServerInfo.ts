@@ -1,7 +1,7 @@
 
 import { Server } from "/../NetscriptDefinitions.js";
 
-export class ServerInfo {
+export interface IServerInfo {
     name: string;
     portsReq: number;
     hackLevel: number;
@@ -21,7 +21,30 @@ export class ServerInfo {
         smtpPortOpen: boolean;
         httpPortOpen: boolean;
         sqlPortOpen: boolean;
-    }
+    };
+}
+
+export class ServerInfo implements IServerInfo {
+    name: string;
+    portsReq: number;
+    hackLevel: number;
+    maxMoney: number;
+    minSec: number;
+    money: number;
+    security: number;
+    maxRam: number;
+    usedRam: number;
+    hasRoot: boolean;
+    cores: number;
+    openPorts: number;
+    playerServer: boolean;
+    openPortsTool: {
+        sshPortOpen: boolean;
+        ftpPortOpen: boolean;
+        smtpPortOpen: boolean;
+        httpPortOpen: boolean;
+        sqlPortOpen: boolean;
+    };
 
     constructor(server: Server) {
         this.name = server.hostname;

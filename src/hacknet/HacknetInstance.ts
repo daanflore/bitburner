@@ -5,7 +5,7 @@
 */
 
 import { Hacknet, NS } from '../../NetscriptDefinitions';
-import { HacknetUpgradeEnum } from '../hacknet/HacknetUpgradeEnum.js';
+import { HacknetUpgradeEnum } from 'hacknet/HacknetUpgradeEnum.js';
 
 export abstract class HacknetInstance {
     public abstract GetBestUpgrade(): HacknetUpgrade | undefined;

@@ -1,4 +1,4 @@
-import { NS } from '../NetscriptDefinitions';
+import { NS } from '/../NetscriptDefinitions.js';
 
 export async function main(ns : NS) : Promise<void> {
     const element = eval('document.getElementsByClassName("MuiDrawer-root MuiDrawer-docked css-v3syqg")[0].parentElement');

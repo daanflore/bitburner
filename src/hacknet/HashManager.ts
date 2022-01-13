@@ -1,7 +1,7 @@
 import { Hacknet, NS } from "/../NetscriptDefinitions.js";
 import { HacknetSettings } from "hacknet/HacknetSettings.js";
 import { Logger } from "helpers/Logger.js";
-import { LogLevelEnum } from "/LogLevelEnum.js";
+import { LogLevelEnum } from "LogLevelEnum.js";
 
 export class HashManager {
     private _hacknet: Hacknet;

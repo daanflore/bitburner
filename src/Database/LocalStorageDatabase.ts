@@ -1,4 +1,4 @@
-import { IDatabase } from "/database/IDatabase.js";
+import { IDatabase } from "database/IDatabase.js";
 import { NS } from "/../NetscriptDefinitions.js";
 
 export class LocalStorageDatabase implements IDatabase {

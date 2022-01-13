@@ -1,9 +1,9 @@
-import { HacknetServer, HacknetUpgrade } from "/hacknet/HacknetInstance.js";
-import { HacknetUpgradeEnum, HacknetUpgradeStatusEnum } from "/hacknet/HacknetUpgradeEnum.js";
+import { HacknetServer, HacknetUpgrade } from "hacknet/HacknetInstance.js";
+import { HacknetUpgradeEnum, HacknetUpgradeStatusEnum } from "hacknet/HacknetUpgradeEnum.js";
 import { Hacknet, NS } from "/../NetscriptDefinitions.js";
-import { HacknetSettings } from "/hacknet/HacknetSettings.js";
-import { Logger } from "/helpers/Logger.js";
-import { LogLevelEnum } from "/LogLevelEnum.js";
+import { HacknetSettings } from "hacknet/HacknetSettings.js";
+import { Logger } from "helpers/Logger.js";
+import { LogLevelEnum } from "LogLevelEnum.js";
 
 export class HacknetManager {
     private _list: Array<HacknetServer> = [];

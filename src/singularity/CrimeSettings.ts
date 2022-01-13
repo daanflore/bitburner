@@ -1,7 +1,7 @@
-import { CrimeEnum } from "/singularity/CrimeEnum.js";
+import { CrimeEnum } from "singularity/CrimeEnum.js";
 import { NS } from "/../NetscriptDefinitions.js";
-import { SettingsObject } from "/database/SettingsObject.js";
-import { ILoggerSettings } from "/helpers/ILoggerSettings.js";
+import { SettingsObject } from "database/SettingsObject.js";
+import { ILoggerSettings } from "helpers/ILoggerSettings.js";
 import { LogLevelEnum } from "LogLevelEnum.js";
 
 export class CrimeSettings extends SettingsObject implements ILoggerSettings {

@@ -1,6 +1,6 @@
-import { CrimeSettings } from '/singularity/CrimeSettings.js';
+import { CrimeSettings } from 'singularity/CrimeSettings.js';
 import { CrimeStats, NS } from '/../NetscriptDefinitions.js';
-import { CrimeEnum } from '/singularity/CrimeEnum.js';
+import { CrimeEnum } from 'singularity/CrimeEnum.js';
 
 export class CrimeManager {
     private _crimeSettings: CrimeSettings;

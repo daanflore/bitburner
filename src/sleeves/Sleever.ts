@@ -1,4 +1,4 @@
-import { SleeveManager } from '/sleeves/SleeveManager.js';
+import { SleeveManager } from 'sleeves/SleeveManager.js';
 import { NS } from '/../NetscriptDefinitions.js';
 
 export async function main(ns : NS) : Promise<void> {

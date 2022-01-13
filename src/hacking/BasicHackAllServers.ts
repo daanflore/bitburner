@@ -1,8 +1,7 @@
 import { NS } from '/../NetscriptDefinitions.js';
-import { IDatabase } from '/database/IDatabase.js';
-import { LocalStorageDatabase } from '/database/LocalStorageDatabase.js';
-import { ServerDbInfo, ServerInfo } from '/servers/ServerInfo.js';
-
+import { IDatabase } from 'database/IDatabase.js';
+import { LocalStorageDatabase } from 'database/LocalStorageDatabase.js';
+import { IServerInfo, ServerDbInfo } from 'servers/ServerInfo.js';
 
 export async function main(ns: NS): Promise<void> {
     const flags = ns.flags([
@@ -35,7 +34,7 @@ export async function main(ns: NS): Promise<void> {
 
 
     async function RunHackAllServers(killScript: boolean): Promise<void> {
-        const servers = database.GetItem<Array<ServerInfo>>(ServerDbInfo.keys.nonHackNode) ?? [];
+        const servers = database.GetItem<Array<IServerInfo>>(ServerDbInfo.keys.nonHackNode) ?? [];
 
         for (const server of servers) {
             ns.print("Checking: " + server.name);
@@ -87,7 +86,7 @@ export async function main(ns: NS): Promise<void> {
                         if (server.maxRam > 0) {
                             await KillAndRunScript(server, script, killScript);
                         } else {
-                            //await BuyServerAndRunScript(server.name, script, flags.serverRam, killScript);
+                            await BuyServerAndRunScript(server.name, script, flags.serverRam, killScript);
                         }
                     }
                     else {
@@ -102,7 +101,7 @@ export async function main(ns: NS): Promise<void> {
         }
     }
 
-    async function KillAndRunScript(server: ServerInfo, script: string, killScript: boolean, ...scriptArgs: (string | number | boolean)[]): Promise<void> {
+    async function KillAndRunScript(server: IServerInfo, script: string, killScript: boolean, ...scriptArgs: (string | number | boolean)[]): Promise<void> {
         if (killScript) {
             if (ns.scriptKill(script, server.name)) {
                 ns.print("Ram: " + server.usedRam);
@@ -125,7 +124,7 @@ export async function main(ns: NS): Promise<void> {
         }
     }
 
-    /*async function BuyServerAndRunScript(server: string, script: string, ram: number, killScript: boolean): Promise<void> {
+    async function BuyServerAndRunScript(server: string, script: string, ram: number, killScript: boolean): Promise<void> {
         ns.print(`Getting server`);
         let servers = ns.getPurchasedServers();
         ns.print(servers);
@@ -154,6 +153,27 @@ export async function main(ns: NS): Promise<void> {
             return;
         }
 
-        await KillAndRunScript(serverToUse, script, killScript, server);
-    }*/
+        const playerServer: IServerInfo = {
+            name: serverToUse,
+            maxRam: ns.getServerMaxRam(serverToUse),
+            maxMoney: 0,
+            openPorts: 0,
+            security: 0,
+            cores: 1, hackLevel: 0,
+            hasRoot: true, usedRam: 0,
+            minSec: 0,
+            money: 0,
+            playerServer: true,
+            portsReq: 0,
+            openPortsTool: {
+                httpPortOpen: false,
+                ftpPortOpen: false,
+                smtpPortOpen: false,
+                sqlPortOpen: false,
+                sshPortOpen: false
+            },
+        };
+
+        await KillAndRunScript(playerServer, script, killScript, server);
+    }
 }

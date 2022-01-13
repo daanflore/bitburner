@@ -1,6 +1,6 @@
-import { LocalStorageDatabase } from "/database/LocalStorageDatabase.js";
+import { LocalStorageDatabase } from "database/LocalStorageDatabase.js";
 import { NS } from "/../NetscriptDefinitions.js";
-import { IDatabase } from "/database/IDatabase.js";
+import { IDatabase } from "database/IDatabase.js";
 
 export abstract class SettingsObject {
     [key: string]: any;

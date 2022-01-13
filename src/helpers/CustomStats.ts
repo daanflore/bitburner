@@ -1,8 +1,7 @@
-import { hostname } from 'os';
 import { NS } from '../../NetscriptDefinitions.js';
-import { IDatabase } from '/database/IDatabase.js';
-import { LocalStorageDatabase } from '/database/LocalStorageDatabase.js';
-import { ServerDbInfo, ServerInfo } from '/servers/ServerInfo.js';
+import { IDatabase } from 'database/IDatabase.js';
+import { LocalStorageDatabase } from 'database/LocalStorageDatabase.js';
+import { ServerDbInfo, ServerInfo } from 'servers/ServerInfo.js';
 
 /** @param {NS} ns **/
 export async function main(ns: NS): Promise<void> {

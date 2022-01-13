@@ -1,4 +1,4 @@
-import { NS } from '../NetscriptDefinitions';
+import { NS } from '/../NetscriptDefinitions.js';
 
 const facServers: any = {
     "CSEC": "yellow",
