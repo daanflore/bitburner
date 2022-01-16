@@ -1,11 +1,11 @@
-import { NS } from '/../NetscriptDefinitions.js';
+import { NS, ProcessInfo } from '/../NetscriptDefinitions.js';
 
 export async function main(ns: NS): Promise<void> {
     ns.disableLog("ALL");
-    const hashes: any = {};
+    const hashes: { [key: string]: number} = {};
     const files = ns.ls('home', '.js');
     for (const file of files) {
-        const contents = ns.read(file);
+        const contents = <string>ns.read(file);
         hashes[file] = getHash(contents);
     }
 
@@ -13,7 +13,7 @@ export async function main(ns: NS): Promise<void> {
         const files = ns.ls('home', '.js');
 
         for (const file of files) {
-            const contents = ns.read(file);
+            const contents = <string>ns.read(file);
             const hash = getHash(contents);
 
             if (hash != hashes[file]) {
@@ -24,7 +24,7 @@ export async function main(ns: NS): Promise<void> {
                 });
 
                 for (const process of processes) {
-                    ns.tprint(`INFO: Restarting ${process.filename} ${process.args} -t ${process.threads}`);
+                    ns.tprint(`INFO: Restarting ${process.filename} [${process.args.join(", ")}] -t ${process.threads}`);
                     if (process.filename != ns.getScriptName()) {
                         ns.kill(process.pid);
                         ns.run(process.filename, process.threads, ...process.args);

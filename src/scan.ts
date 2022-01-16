@@ -1,6 +1,6 @@
 import { NS } from '/../NetscriptDefinitions.js';
 
-const facServers: any = {
+const facServers: {[key: string]: string} = {
     "CSEC": "yellow",
     "avmnite-02h": "yellow",
     "I.I.I.I": "yellow",
@@ -13,7 +13,7 @@ const svObj: (name: string, depth: number) => { name: string; depth: number } = 
 
 export function getServers(ns: NS): { name: string; depth: number }[] {
     const result = [];
-    const visited: any = { 'home': 0 };
+    const visited: { [key: string]: number} = { 'home': 0 };
     const queue = Object.keys(visited);
     let name;
     while ((name = queue.pop())) {
@@ -30,13 +30,13 @@ export function getServers(ns: NS): { name: string; depth: number }[] {
     return result;
 }
 
-export async function main(ns: NS): Promise<void> {
+export function main(ns: NS): void {
     let output = "Network:";
 
     getServers(ns).forEach(server => {
         const name = server.name;
         const hackColor = ns.hasRootAccess(name) ? "lime" : "red";
-        const nameColor = facServers[name] ? facServers[name] : "white";
+        const nameColor: string = facServers[name] ? facServers[name] : "white";
 
         const hoverText = ["Req Level: ", ns.getServerRequiredHackingLevel(name),
             "&#10;Req Ports: ", ns.getServerNumPortsRequired(name),
@@ -52,7 +52,7 @@ export async function main(ns: NS): Promise<void> {
         ns.ls(name, ".cct").forEach(ctName => {
             ctText += ["<a title='", ctName,
                 //Comment out the next line to reduce footprint by 5 GB
-                "&#10;", ns.codingcontract.getContractType(ctName, name),
+                //"&#10;", ns.codingcontract.getContractType(ctName, name),
                 "'>©</a>"].join("");
         });
 
@@ -73,7 +73,6 @@ export async function main(ns: NS): Promise<void> {
             `<font color='fuchisa'>${ctText}</font>`,
         ].join("");
     });
-
-    const list = eval("document").getElementById("terminal");
-    list.insertAdjacentHTML('beforeend', output);
+    const list = (<Document>eval("document")).getElementById("terminal");
+    list?.insertAdjacentHTML('beforeend', output);
 }
