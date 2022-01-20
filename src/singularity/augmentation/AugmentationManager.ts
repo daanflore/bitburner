@@ -58,15 +58,7 @@ export class AugmentationManager {
             if(augmentations.length > 0) {
                 augmap.set(faction, augmentations);
             }
-        }
-
-
-        //const result = new Map<string, Augmentation[]>();
-
-        /*return this.GetAugmentationsToInstall().reduce((groups: any, item) => ({
-            ...groups, [item.faction]: [...(groups[item.faction] || []), item]
-        }), {});*/
-   
+        } 
         
         return augmap;
     }

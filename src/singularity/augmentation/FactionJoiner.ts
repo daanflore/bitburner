@@ -1,7 +1,7 @@
 import { AugmentationManager } from 'singularity/augmentation/AugmentationManager.js';
 import { NS } from '/../NetscriptDefinitions.js';
 
-export async function main(ns: NS): Promise<void> {
+export function main(ns: NS): void {
     const augmentationManager = new AugmentationManager(ns);
     const result = augmentationManager.GetInterestingFactionsWithAugmentations();
     

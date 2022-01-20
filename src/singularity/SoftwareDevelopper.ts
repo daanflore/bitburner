@@ -3,7 +3,7 @@ import { NS } from '/../NetscriptDefinitions.js';
 
 export async function main(ns: NS): Promise<void> {
     const skill = ns.getHackingLevel();
-    const programs = Programs.filter((program) => !ns.fileExists(program.name) && program.hacking <= skill);
+    const programs = Programs.filter((program) => !ns.fileExists(program.name) && program.hacking <= skill + ns.getPlayer().intelligence / 2);
 
     for (const program of programs) {
         while (!ns.fileExists(program.name)) {

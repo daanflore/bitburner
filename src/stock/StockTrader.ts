@@ -51,12 +51,12 @@ export async function main(ns: NS): Promise<void> {
 
         const maxPosition = (totalWorth * investPercent) * stockInvestmentRatio;
         ns.clearLog();
-        ns.print(investedStocks + " stocks currently invested in, " + ns.nFormat(stockInvestmentRatio, "(0.00%)") + " NW per-stock ratio.");
+        ns.print(`${investedStocks} stocks currently invested in,  ${ns.nFormat(stockInvestmentRatio, "(0.00%)")}  NW per-stock ratio.`);
         ns.print(ns.nFormat(cashOnHand, "$0.000a") + " CoH, " + ns.nFormat(totalWorth, "$0.000a") + " NW, " + ns.nFormat(maxPosition, "$0.000a") + " is our base position");
         ns.print("Total NW increase since program launch: " + ns.nFormat((totalWorth / initialNW) - 1, "0.00%"));
         ns.print("-----");
         ns.print("Positions: ");
-        symbols.forEach((item, index, array) => {
+        symbols.forEach((item, index) => {
             if (shares[index] > 0) {
                 ns.print(item.padEnd(6)
                     + ns.nFormat(prices[index] * shares[index], "$0.000a").padStart(10)
@@ -69,7 +69,7 @@ export async function main(ns: NS): Promise<void> {
             }
         });
         ns.print("-----");
-        symbols.forEach(function (item, index, array) {
+        symbols.forEach(function (item, index) {
             const forecast = ns.stock.getForecast(item);
             const sharesNum = shares[index];
             if (forecast < 0.5) {
