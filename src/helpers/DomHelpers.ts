@@ -25,21 +25,17 @@ export function CreateStatDisplay(hookName: string, displayText = "", border = t
     if (!border) {
         const styleParent0 = children[0] as HTMLElement;
         const styleParent1 = children[1] as HTMLElement;
-        styleParent0.style.setProperty('border-bottom', '0px');
-        styleParent1.style.setProperty('border-bottom', '0px');
+        styleParent0.style.borderBottom = '0px';
+        styleParent1.style.borderBottom = '0px';
     }
 
     if (color.length != 0) {
-        hook0.style.setProperty('color', color);
-        hook1.style.setProperty('color', color);
-        hook2.style.setProperty('color', color);
+        hook0.style.color = color;
+        hook1.style.color = color;
+        hook2.style.color = color;
     }
 
     firstParent.parentElement?.insertBefore(newRow, firstParent);
-    return;
-
-
-
 }
 
 export function UpdateStatDisplay(name: string, value: string): boolean {
