@@ -21,6 +21,7 @@ export function CreateStatDisplay(hookName: string, displayText = "", border = t
     hook0.innerHTML = displayText;
     hook1.id = hookName + '-extra-hook-1';
     hook2.id = hookName + '-extra-hook-2';
+    hook1.style.paddingLeft = '10px';
 
     if (!border) {
         const styleParent0 = children[0] as HTMLElement;
