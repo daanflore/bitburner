@@ -7,7 +7,7 @@ export async function main(ns: NS): Promise<void> {
     let currentAction: BladeburnerAction | undefined;
 
     while (true) {
-        const result = bladeBurner.ActionToPerform("contract");
+        const result = bladeBurner.ActionToPerform("Operations");
 
         if (currentAction === undefined || currentAction.Name !== result.Name || currentAction.Type !== result.Type) {
             currentAction = result;
